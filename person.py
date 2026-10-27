@@ -2,7 +2,7 @@ import random
 from school import School
 
 class Person:
-    def __int__(self, name) -> None:
+    def __init__(self, name) -> None:
         self.name = name
 
 
@@ -20,14 +20,19 @@ class Student(Person):
         self.marks = {}
         self.subject_grade = {}
         self.grade = None
+        self.gpa = 0.00
 
     def calculate_final_grade(self):
         sum = 0
         for grade in self.subject_grade.values():
             point = School.grade_to_value(grade)
             sum += point
-        gpa = sum /len(self.subject_grade)
-        self.grade = School.value_to_grade(gpa)
+        if sum == 0:
+            self.gpa = 0.00
+            self.grade = 'F'
+        else:
+            self.gpa = sum /len(self.subject_grade)
+            self.grade = School.value_to_grade(self.gpa)
 
     @property
     def id(self):

@@ -1,4 +1,3 @@
-from person import Teacher
 from school import School
 class Subject:
     def __init__(self, name, teacher):

@@ -10,8 +10,6 @@ class School:
     def add_teacher(self, subject, teacher):
         self.teachers[subject] = teacher
     def student_admission(self, student):
-        pass
-    def student_admission(self, student):
         classname = student.classroom.name
         self.classrooms[classname].add_student(student)
 
@@ -50,15 +48,15 @@ class School:
 
     @staticmethod
     def value_to_grade(value):
-        if value >= 4.5 and value <= 5.00:
+        if value >= 5.00:
             return 'A+'
-        elif value >= 3.5 and value < 4.50:
+        elif value >= 4.0 and value < 5.00:
             return 'A'
-        elif value >= 3.0 and value < 3.5:
+        elif value >= 3.5 and value < 4.0:
             return 'A-'
-        elif value >= 2.5 and value < 3.0:
+        elif value >= 3.0 and value < 3.5:
             return 'B'
-        elif value >= 2.0 and value < 2.5:
+        elif value >= 2.0 and value < 3.0:
             return 'C'
         elif value >= 1.0 and value < 2.0:
             return 'D'
@@ -67,32 +65,54 @@ class School:
 
 
     def __repr__(self):
+        width = 50
+        line = "=" * width
+        divider = "-" * width
+
+        # Header
+        result = f"{line}\n"
+        result += f"{'SCHOOL MANAGEMENT REPORT':^{width}}\n"
+        result += f"{f'{self.name}, {self.address}':^{width}}\n"
+        result += f"{line}\n"
+
         # All Classrooms
+        result += f"\nCLASSROOMS\n{divider}\n"
+        result += f"{'Class':<12}{'Students':>10}{'Subjects':>10}\n"
         for key, value in self.classrooms.items():
-            print(key)
-        # All Students 
-        print("All Students")
-        result = ''
+            result += f"{key:<12}{len(value.students):>10}{len(value.subjects):>10}\n"
+
+        # All Students
+        result += f"\nSTUDENTS\n{divider}\n"
+        result += f"{'ID':<12}{'Name':<18}{'Class':<10}\n"
         for key, value in self.classrooms.items():
-            result += f"---{key.upper()} Classroom Students\n"
             for student in value.students:
-                result =+ f"{student.name}\n"
-        print(result)
+                result += f"{student.id:<12}{student.name:<18}{key:<10}\n"
+
         # All Subjects
-        subject = ''
+        result += f"\nSUBJECTS\n{divider}\n"
+        result += f"{'Class':<12}{'Subject':<14}{'Teacher':<18}\n"
         for key, value in self.classrooms.items():
-                    subject += f"---{key.upper()} Classroom Subjects\n"
-                    for sub in value.subjects:
-                        subject =+ f"{sub.name}\n"
+            for sub in value.subjects:
+                result += f"{key:<12}{sub.name:<14}{sub.teacher.name:<18}\n"
 
-        print(subject)
         # All Teachers
-        # All Student Results
-        print("Students Results")
-        for key, value in self.classrooms.items():
-            for student in value.studnets:
-                for k, i in student.marks.items():
-                    print(student.name, k ,i, student.subject_grade[7])
+        result += f"\nTEACHERS\n{divider}\n"
+        result += f"{'Teacher':<20}{'Subjects'}\n"
+        teacher_subjects = {}
+        for subject, teacher in self.teachers.items():
+            teacher_subjects.setdefault(teacher.name, []).append(subject)
+        for name, subjects in teacher_subjects.items():
+            result += f"{name:<20}{', '.join(subjects)}\n"
 
-                print(student.calculate_final_grade())
-        return ''
+        # All Student Results
+        result += f"\n{line}\n{'STUDENT RESULTS':^{width}}\n{line}\n"
+        for key, value in self.classrooms.items():
+            for student in value.students:
+                result += f"\n{student.name} ({student.id})\n"
+                result += f"  {'Subject':<14}{'Marks':>6}   {'Grade'}\n"
+                for k, i in student.marks.items():
+                    result += f"  {k:<14}{i:>6}   {student.subject_grade[k]}\n"
+                result += f"  {'-' * 28}\n"
+                result += f"  {'GPA':<14}{student.gpa:>6.2f}   {student.grade}\n"
+        result += f"\n{line}"
+        return result

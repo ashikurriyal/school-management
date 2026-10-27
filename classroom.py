@@ -9,7 +9,7 @@ class Classroom:
         self.students.append(student)
 
     def add_subject(self, subject):
-        self.subject.append(subject)
+        self.subjects.append(subject)
     def take_semester_final_exam(self):
         for subject in self.subjects:
             subject.exam(self.students)
