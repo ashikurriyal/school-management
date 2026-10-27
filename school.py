@@ -11,6 +11,9 @@ class School:
         self.teachers[subject] = teacher
     def student_admission(self, student):
         pass
+    def student_admission(self, student):
+        classname = student.classroom.name
+        self.classrooms[classname].add_student(student)
 
 
     @staticmethod
@@ -65,7 +68,31 @@ class School:
 
     def __repr__(self):
         # All Classrooms
+        for key, value in self.classrooms.items():
+            print(key)
         # All Students 
+        print("All Students")
+        result = ''
+        for key, value in self.classrooms.items():
+            result += f"---{key.upper()} Classroom Students\n"
+            for student in value.students:
+                result =+ f"{student.name}\n"
+        print(result)
         # All Subjects
+        subject = ''
+        for key, value in self.classrooms.items():
+                    subject += f"---{key.upper()} Classroom Subjects\n"
+                    for sub in value.subjects:
+                        subject =+ f"{sub.name}\n"
+
+        print(subject)
         # All Teachers
         # All Student Results
+        print("Students Results")
+        for key, value in self.classrooms.items():
+            for student in value.studnets:
+                for k, i in student.marks.items():
+                    print(student.name, k ,i, student.subject_grade[7])
+
+                print(student.calculate_final_grade())
+        return ''
